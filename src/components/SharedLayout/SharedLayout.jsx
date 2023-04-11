@@ -3,10 +3,9 @@ import Loader from 'components/Loader/Loader';
 import {
   Container,
   Header,
-  Link,
+  MenuLink,
 } from 'components/SharedLayout/SharedLayout.styled';
 import { Suspense } from 'react';
-
 import { Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
@@ -14,12 +13,10 @@ const SharedLayout = () => {
   return (
     <Container>
       <Header>
-        <nav>
-          <Link to="/" end>
-            Home
-          </Link>
-          <Link to="/movies">Movies</Link>
-        </nav>
+        <MenuLink to="/" end>
+          Home
+        </MenuLink>
+        <MenuLink to="/movies">Movies</MenuLink>
       </Header>
       <main>
         <Suspense fallback={<Loader />}>

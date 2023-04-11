@@ -1,7 +1,6 @@
 import { lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
-//import Loader from './Loader';
 
 const Movies = lazy(() => import('../pages/Movies/Movies'));
 const Home = lazy(() => import('pages/Home/Home'));

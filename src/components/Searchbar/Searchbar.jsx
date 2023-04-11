@@ -13,6 +13,7 @@ const Searchbar = ({ onSubmit }) => (
         autoComplete="off"
         autoFocus
         placeholder="Search movies"
+        className="font-sans text-sm font-medium text-black"
       />
     </form>
   </Header>

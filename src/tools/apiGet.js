@@ -23,12 +23,9 @@ export const useFetch = (url, options = null) => {
   const [isLoaded, setIsLoaded] = useState(true);
 
   useEffect(() => {
-    // if (!url) return;
-
     const controller = new AbortController();
     (async () => {
       try {
-        //if (!url) throw new Error('введи');
         if (url) {
           const response = await getFetch(url, controller, options);
           setData(response.data);

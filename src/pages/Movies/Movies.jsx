@@ -1,17 +1,16 @@
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { toast, Zoom } from 'react-toastify';
 import { useFetch } from 'tools/apiGet';
 import Loader from 'components/Loader/Loader';
-import { toast } from 'react-toastify';
-
 import Searchbar from 'components/Searchbar/Searchbar';
-import { useEffect, useState } from 'react';
 import MoviesList from 'components/MoviesList/MoviesList';
 
 const Movies = () => {
   const url = `search/company`;
 
   const location = useLocation();
-
+  const navigate = useNavigate();
   const [searchString, setSearchString] = useSearchParams('');
   const [options, setOptions] = useState({
     query: searchString.get('query'),
@@ -38,10 +37,18 @@ const Movies = () => {
     setOptions(prev => ({ ...prev, query: inputValue }));
     inputString.value = '';
   };
-
+  const CloseButton = () => (
+    <button onClick={() => navigate(location.pathname)}>Go to Back</button>
+  );
   useEffect(() => {
     if (data?.total_results <= 0 && options.query) {
-      toast.error('нема нікого !');
+      toast.error('нема нікого !', {
+        closeButton: CloseButton,
+        onClose: () => navigate(location.pathname),
+        transition: Zoom,
+        pauseOnFocusLoss: false,
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
     // eslint-disable-next-line
   }, [data]);

@@ -31,6 +31,8 @@ const MovieDetails = () => {
         closeButton: CloseButton,
         onClose: () => navigate(backLinkHref),
         transition: Zoom,
+        pauseOnFocusLoss: false,
+        position: toast.POSITION.TOP_CENTER,
       });
     }
     // eslint-disable-next-line
@@ -44,6 +46,7 @@ const MovieDetails = () => {
       {showDetail && (
         <>
           <button
+            className="bg-red-700"
             onClick={() => {
               navigate(backLinkHref);
             }}
