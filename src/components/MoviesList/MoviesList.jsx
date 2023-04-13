@@ -1,4 +1,5 @@
-import { Link } from 'components/SharedLayout/SharedLayout.styled';
+import PropTypes from 'prop-types';
+import { Link } from 'components/SharedLayout/SharedLayout';
 const MoviesList = ({ films, location }) => (
   <ul className="pt-4 flex flex-col gap-1 w-max">
     {films.map(item => (
@@ -10,4 +11,10 @@ const MoviesList = ({ films, location }) => (
     ))}
   </ul>
 );
+
+MoviesList.prototype = {
+  films: PropTypes.array.isRequired,
+  location: PropTypes.shape,
+};
+
 export default MoviesList;

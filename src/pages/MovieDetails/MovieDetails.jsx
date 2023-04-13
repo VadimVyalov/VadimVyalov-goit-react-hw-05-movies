@@ -1,10 +1,12 @@
 import { useParams, useLocation, Outlet, useNavigate } from 'react-router-dom';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useState, useCallback } from 'react';
 import { useFetch } from 'tools/apiGet';
 import Loader from 'components/Loader/Loader';
-import { Link } from 'components/SharedLayout/SharedLayout.styled';
-//import { BackLink } from 'components/BackLink/BackLink';
-import { toast, Zoom } from 'react-toastify';
+
+import { TbArrowBackUp } from 'react-icons/tb';
+import MovieCard from '../../components/MovieCard/MovieCard';
+import ErrorMessage from 'components/ErrorMessage/ErrorMessage';
+import MovieAdditional from '../../components/MovieAdditional/MovieAdditional';
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -15,8 +17,9 @@ const MovieDetails = () => {
   const url = `/movie/${id}`;
   const { data, isLoaded, error } = useFetch(url);
 
-  const CloseButton = () => (
-    <button onClick={() => navigate(backLinkHref)}>Go to Back</button>
+  const backToPrev = useCallback(
+    () => navigate(backLinkHref),
+    [backLinkHref, navigate]
   );
 
   useEffect(() => {
@@ -24,55 +27,32 @@ const MovieDetails = () => {
       setMovieInfo(data);
     }
     if (error) {
-      //   console.log(error);
-
-      //toastId.current =
-      toast.error(error, {
-        closeButton: CloseButton,
-        onClose: () => navigate(backLinkHref),
-        transition: Zoom,
-        pauseOnFocusLoss: false,
-        position: toast.POSITION.TOP_CENTER,
-      });
+      ErrorMessage(error, backToPrev);
     }
-    // eslint-disable-next-line
-  }, [error, data]);
+  }, [error, data, backToPrev]);
 
   const showDetail = movieInfo && !error;
   const showLoader = isLoaded && !error;
+
   return (
     <>
       {showLoader && <Loader />}
       {showDetail && (
         <>
           <button
-            className="bg-red-700"
-            onClick={() => {
-              navigate(backLinkHref);
-            }}
+            onClick={() => navigate(backLinkHref)}
+            className="bg-sky-200 px-3 mb-4 rounded-md flex items-center gap-2
+                    border border-stone-400 border-solid 
+                  hover:bg-sky-400 hover:shadow hover:shadow-sky-500"
           >
+            <TbArrowBackUp />
             Back to list
           </button>
-          <img
-            src={`https://image.tmdb.org/t/p/w500/${movieInfo.backdrop_path}`}
-            alt={`Poster: ${movieInfo.title}`}
-          />
-          <h2>{`${movieInfo.original_title} (${movieInfo.release_date.slice(
-            0,
-            4
-          )})`}</h2>
-          <p>User score: {movieInfo.vote_average}</p>
-          <h3>Overview</h3>
-          <p>{movieInfo.overview}</p>
-          <h3>Genres</h3>
-          <p>{movieInfo.genres.map(e => e.name).join(' | ')}</p>
-          <p>Additional information</p>
-          <Link to="cast" state={location.state}>
-            Cast
-          </Link>
-          <Link to="reviews" state={location.state}>
-            Reviews
-          </Link>
+
+          <MovieCard movieInfo={movieInfo} />
+
+          <MovieAdditional link={navigate} state={location.state} />
+
           <Suspense fallback={<Loader />}>
             <Outlet />
           </Suspense>

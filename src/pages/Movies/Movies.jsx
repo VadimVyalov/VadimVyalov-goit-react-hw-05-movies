@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import { toast, Zoom } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useFetch } from 'tools/apiGet';
 import Loader from 'components/Loader/Loader';
 import Searchbar from 'components/Searchbar/Searchbar';
 import MoviesList from 'components/MoviesList/MoviesList';
+import ErrorMessage from 'components/ErrorMessage/ErrorMessage';
 
 const Movies = () => {
   const url = `search/company`;
@@ -16,8 +17,12 @@ const Movies = () => {
     query: searchString.get('query'),
     page: 1,
   });
-
   const { data, isLoaded, error } = useFetch(url, options);
+  const backLinkHref = location.pathname ?? '/';
+  const closeT = useCallback(
+    () => navigate(backLinkHref),
+    [backLinkHref, navigate]
+  );
 
   const onSubmit = evt => {
     evt.preventDefault();
@@ -37,21 +42,13 @@ const Movies = () => {
     setOptions(prev => ({ ...prev, query: inputValue }));
     inputString.value = '';
   };
-  const CloseButton = () => (
-    <button onClick={() => navigate(location.pathname)}>Go to Back</button>
-  );
+
   useEffect(() => {
     if (data?.total_results <= 0 && options.query) {
-      toast.error('нема нікого !', {
-        closeButton: CloseButton,
-        onClose: () => navigate(location.pathname),
-        transition: Zoom,
-        pauseOnFocusLoss: false,
-        position: toast.POSITION.TOP_CENTER,
-      });
+      ErrorMessage('нема нікого !', closeT);
     }
     // eslint-disable-next-line
-  }, [data]);
+  }, [data, closeT]);
 
   if (error) {
     toast.error(error);
@@ -60,7 +57,6 @@ const Movies = () => {
   const showList = data?.total_results > 0 && !error;
   const showLoader = isLoaded && !error;
   const films = data?.results;
-
   return (
     <>
       <Searchbar onSubmit={onSubmit} />

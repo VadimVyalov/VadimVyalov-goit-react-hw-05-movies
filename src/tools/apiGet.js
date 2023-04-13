@@ -12,7 +12,7 @@ export async function getFetch(url, controller = null, options = null) {
   if (options) {
     param.params = { ...param.params, ...options };
   }
-  console.log(param);
+  // console.log(param);
   const response = await axios.get(url, param);
   return response;
 }

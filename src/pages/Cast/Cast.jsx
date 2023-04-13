@@ -18,25 +18,53 @@ const Cast = () => {
 
   return isLoaded ? (
     <Loader />
-  ) : (
-    cast && (
-      <>
+  ) : cast?.length ? (
+    <>
+      <h2 className="text-xl font-semibold my-2">Cast</h2>
+      <ul
+        className="grid gap-3 
+                grid-cols-2
+                sm:grid-cols-3
+                md:grid-cols-4
+                lg:grid-cols-5 
+                xl:grid-cols-6"
+      >
         {cast.map(e => (
-          <li key={e.id}>
+          <li
+            key={e.id}
+            className="flex flex-col gap-2 p-2 border border-solid border-stone-800
+           rounded-md"
+          >
             <img
+              className="w-full"
               src={
                 e.profile_path
                   ? `https://image.tmdb.org/t/p/w185/${e.profile_path}`
-                  : `https://via.placeholder.com/185x278`
+                  : `https://via.placeholder.com/185x280/cccccc/db0404.jpg?text=No+image`
               }
+              width={185}
+              height={280}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null; // prevents looping
+                currentTarget.src =
+                  'https://via.placeholder.com/185x280/cccccc/db0404.jpg?text=No+image';
+              }}
               alt={`Poster: ${e.name}`}
             />
-            <p>{e.original_name}</p>
-            <p>Pharacter: {e.character}</p>
+            <p className="text-lg font-semibold">{e.original_name}</p>
+            <p className="text-base font-medium ">
+              Pharacter:
+              <span className="text-lg font-semibold italic">
+                {' '}
+                {e.character}{' '}
+              </span>
+            </p>
           </li>
         ))}
-      </>
-    )
+      </ul>
+    </>
+  ) : (
+    <p className="text-lg font-semibold">немаэ інформації</p>
   );
 };
 export default Cast;
