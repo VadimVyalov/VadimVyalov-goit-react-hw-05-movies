@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { MdOutlineImageSearch } from 'react-icons/md';
+import { BiMoviePlay } from 'react-icons/bi';
 const Searchbar = ({ onSubmit }) => (
   <div
     className="flex items-center justify-center px-6 py-3 text-white 
@@ -15,7 +15,7 @@ const Searchbar = ({ onSubmit }) => (
         className="inline-block w-12 h-12 bg-inherit text-sky-500 
                   opacity-60 transition-opacity duration-300 hover:opacity-100"
       >
-        <MdOutlineImageSearch className="block h-full w-full" />
+        <BiMoviePlay className="block h-full w-full" />
       </button>
       <input
         name="query"
