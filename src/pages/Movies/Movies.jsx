@@ -4,11 +4,11 @@ import { toast } from 'react-toastify';
 import { useFetch } from 'tools/apiGet';
 import Loader from 'components/Loader/Loader';
 import Searchbar from 'components/Searchbar/Searchbar';
-import MoviesList from 'components/MoviesList/MoviesList';
 import ErrorMessage from 'components/ErrorMessage/ErrorMessage';
+import MoviesList from 'components/MoviesList/MoviesList';
 
 const Movies = () => {
-  const url = `search/company`;
+  const url = `search/movie`;
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -61,7 +61,13 @@ const Movies = () => {
     <>
       <Searchbar onSubmit={onSubmit} />
       {showLoader && <Loader />}
-      {showList && <MoviesList films={films} location={location} />}
+      {showList && (
+        <MoviesList
+          title={`За пошуком "${options.query}"`}
+          films={films}
+          location={location}
+        />
+      )}
     </>
   );
 };

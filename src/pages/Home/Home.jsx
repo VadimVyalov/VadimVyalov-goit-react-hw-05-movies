@@ -2,7 +2,8 @@ import { useFetch } from 'tools/apiGet';
 import Loader from 'components/Loader/Loader';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Trending from 'components/Trending/Trending';
+import MoviesList from 'components/MoviesList/MoviesList';
+
 const Home = () => {
   const url = 'trending/movie/day';
   const location = useLocation();
@@ -19,7 +20,9 @@ const Home = () => {
   return (
     <>
       {showLoader && <Loader />}
-      {showList && <Trending films={films} location={location} />}
+      {showList && (
+        <MoviesList title={'У трендах'} films={films} location={location} />
+      )}
     </>
   );
 };
